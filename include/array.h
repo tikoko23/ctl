@@ -1,17 +1,17 @@
-#ifndef CSTL_ARRAY
-#define CSTL_ARRAY
+#ifndef CTL_ARRAY
+#define CTL_ARRAY
 
 #include <stddef.h>
 #include <stdlib.h>
 
-#define CSTL_DECLARE_ARRAY_METHODS(T, prefix) \
+#define CTL_DECLARE_ARRAY_METHODS(T, prefix) \
 typedef struct { \
     size_t length, capacity; \
     T *items; \
 } prefix; \
-CSTL_DECLARE_ARRAY_METHODS_EXT(prefix, T, prefix) \
+CTL_DECLARE_ARRAY_METHODS_EXT(prefix, T, prefix) \
 
-#define CSTL_DECLARE_ARRAY_METHODS_EXT(struct_t, T, prefix) \
+#define CTL_DECLARE_ARRAY_METHODS_EXT(struct_t, T, prefix) \
 struct_t prefix ## New(); \
 struct_t prefix ## NewWithCap(size_t cap); \
 struct_t prefix ## NewFilled(size_t n, T value); \
@@ -23,10 +23,10 @@ void prefix ## Pop(struct_t *this); \
 T *prefix ## Front(const struct_t *this); \
 T *prefix ## Back(const struct_t *this); \
 
-#define CSTL_DEFINE_ARRAY_METHODS(T, prefix) \
-CSTL_DEFINE_ARRAY_METHODS_EXT(prefix, T, prefix, 0) \
+#define CTL_DEFINE_ARRAY_METHODS(T, prefix) \
+CTL_DEFINE_ARRAY_METHODS_EXT(prefix, T, prefix, 0) \
 
-#define CSTL_DEFINE_ARRAY_METHODS_EXT(struct_t, T, prefix, destructor) \
+#define CTL_DEFINE_ARRAY_METHODS_EXT(struct_t, T, prefix, destructor) \
 static void __ ## prefix ## grow(struct_t *this, size_t n) { \
     if (this->capacity >= n) { \
         return; \

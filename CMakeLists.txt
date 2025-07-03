@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.5.0...3.25)
-project(cstl VERSION 0.1.0 LANGUAGES C)
+project(ctl VERSION 0.1.0 LANGUAGES C)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
@@ -31,12 +31,12 @@ include_directories("include")
 
 file(GLOB_RECURSE LIB_SOURCES src/lib/**.c)
 file(GLOB_RECURSE EXEC_SOURCES src/exec/**.c)
-add_library(cstl_shared SHARED ${LIB_SOURCES})
-add_library(cstl_static STATIC ${LIB_SOURCES})
+add_library(ctl_shared SHARED ${LIB_SOURCES})
+add_library(ctl_static STATIC ${LIB_SOURCES})
 
-add_executable(cstl_exec ${EXEC_SOURCES})
-target_link_libraries(cstl_exec PRIVATE cstl_static m)
+add_executable(ctl_exec ${EXEC_SOURCES})
+target_link_libraries(ctl_exec PRIVATE ctl_static m)
 
-set_target_properties(cstl_shared PROPERTIES OUTPUT_NAME "cstl")
-set_target_properties(cstl_static PROPERTIES OUTPUT_NAME "cstl")
-set_target_properties(cstl_exec PROPERTIES OUTPUT_NAME "cstl")
+set_target_properties(ctl_shared PROPERTIES OUTPUT_NAME "ctl")
+set_target_properties(ctl_static PROPERTIES OUTPUT_NAME "ctl")
+set_target_properties(ctl_exec PROPERTIES OUTPUT_NAME "ctl")

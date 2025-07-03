@@ -8,8 +8,8 @@ typedef struct {
     int32_t *items;
 } I32Array;
 
-CSTL_DECLARE_ARRAY_METHODS_EXT(I32Array, int32_t, i32);
-CSTL_DEFINE_ARRAY_METHODS_EXT(I32Array, int32_t, i32, 0);
+CTL_DECLARE_ARRAY_METHODS_EXT(I32Array, int32_t, i32);
+CTL_DEFINE_ARRAY_METHODS_EXT(I32Array, int32_t, i32, 0);
 
 int main(void) {
     I32Array arr = i32NewFilled(37, 23);
