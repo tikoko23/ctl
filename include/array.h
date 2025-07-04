@@ -22,6 +22,7 @@ T *prefix ## Append(struct_t *this, T value); \
 void prefix ## Pop(struct_t *this); \
 T *prefix ## Front(const struct_t *this); \
 T *prefix ## Back(const struct_t *this); \
+struct_t prefix ## Move(struct_t *this); \
 
 #define CTL_DEFINE_ARRAY_METHODS(T, prefix) \
 CTL_DEFINE_ARRAY_METHODS_EXT(prefix, T, prefix, 0) \
@@ -112,6 +113,11 @@ T *prefix ## Front(const struct_t *this) { \
 } \
 T *prefix ## Back(const struct_t *this) { \
     return this->items + this->length - 1; \
+} \
+struct_t prefix ## Move(struct_t *this) { \
+    struct_t ret = *this; \
+    *this = prefix ## New(); \
+    return ret; \
 } \
 
 #endif
