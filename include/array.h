@@ -3,6 +3,7 @@
 
 #include <stddef.h>
 #include <stdlib.h>
+#include <string.h>
 
 #define CTL_DECLARE_ARRAY_METHODS(T, prefix) \
 typedef struct { \
@@ -11,23 +12,30 @@ typedef struct { \
 } prefix; \
 CTL_DECLARE_ARRAY_METHODS_EXT(prefix, T, prefix) \
 
-#define CTL_DECLARE_ARRAY_METHODS_EXT(struct_t, T, prefix) \
-struct_t prefix ## New(); \
-struct_t prefix ## NewWithCap(size_t cap); \
-struct_t prefix ## NewFilled(size_t n, T value); \
-void prefix ## Free(struct_t *this); \
-void prefix ## Reserve(struct_t *this, size_t n); \
-void prefix ## Fill(struct_t *this, size_t n, T value); \
-T *prefix ## Append(struct_t *this, T value); \
-void prefix ## Pop(struct_t *this); \
-T *prefix ## Front(const struct_t *this); \
-T *prefix ## Back(const struct_t *this); \
-struct_t prefix ## Move(struct_t *this); \
+#define CTL_DECLARE_ARRAY_METHODS_EXT(struct_t, T, prefix, ...) \
+__VA_ARGS__ struct_t prefix ## New(); \
+__VA_ARGS__ struct_t prefix ## NewWithCap(size_t cap); \
+__VA_ARGS__ struct_t prefix ## NewFilled(size_t n, T value); \
+__VA_ARGS__ void prefix ## Free(struct_t *this); \
+__VA_ARGS__ void prefix ## Reserve(struct_t *this, size_t n); \
+__VA_ARGS__ void prefix ## Fill(struct_t *this, size_t n, T value); \
+__VA_ARGS__ T *prefix ## Append(struct_t *this, T value); \
+__VA_ARGS__ void prefix ## Pop(struct_t *this); \
+__VA_ARGS__ T *prefix ## Front(const struct_t *this); \
+__VA_ARGS__ T *prefix ## Back(const struct_t *this); \
+__VA_ARGS__ struct_t prefix ## Move(struct_t *this); \
+__VA_ARGS__ struct_t prefix ## Dup(const struct_t *this); \
 
 #define CTL_DEFINE_ARRAY_METHODS(T, prefix) \
 CTL_DEFINE_ARRAY_METHODS_EXT(prefix, T, prefix, 0) \
 
-#define CTL_DEFINE_ARRAY_METHODS_EXT(struct_t, T, prefix, destructor) \
+#define CTL_DEFINE_ARRAY_METHODS_EXT(struct_t, T, prefix, destructor, duplicator, ...) \
+static void __ ## prefix ## gen_warnings(void) { \
+    typedef void (*destructor_t)(T *this); \
+    typedef T (*dup_t)(const T *this); \
+    destructor_t _de = destructor; \
+    dup_t _du = duplicator; \
+} \
 static void __ ## prefix ## grow(struct_t *this, size_t n) { \
     if (this->capacity >= n) { \
         return; \
@@ -41,7 +49,7 @@ static void __ ## prefix ## grow(struct_t *this, size_t n) { \
     prefix ## Reserve(this, this->capacity); \
 } \
 \
-struct_t prefix ## New() { \
+__VA_ARGS__ struct_t prefix ## New() { \
     struct_t this = { \
         .length = 0, \
         .capacity = 0, \
@@ -51,22 +59,18 @@ struct_t prefix ## New() { \
     return this; \
 } \
 \
-struct_t prefix ## NewWithCap(size_t cap) { \
+__VA_ARGS__ struct_t prefix ## NewWithCap(size_t cap) { \
     struct_t this = prefix ## New(); \
     prefix ## Reserve(&this, cap); \
     return this; \
 } \
 \
-struct_t prefix ## NewFilled(size_t n, T value) { \
-    struct_t this = prefix ## NewWithCap(n); \
-    for (size_t i = 0; i < n; ++i) { \
-        this.items[i] = value; \
-    } \
-    \
-    this.length = n; \
+__VA_ARGS__ struct_t prefix ## NewFilled(size_t n, T value) { \
+    struct_t this = prefix ## New(); \
+    prefix ## Fill(&this, n, value); \
     return this; \
 } \
-void prefix ## Free(struct_t *this) { \
+__VA_ARGS__ void prefix ## Free(struct_t *this) { \
     if (destructor) { \
         for (size_t i = 0; i < this->length; ++i) { \
             ((void (*)(T *))destructor)(this->items + i); \
@@ -76,7 +80,7 @@ void prefix ## Free(struct_t *this) { \
     free(this->items); \
 } \
 \
-void prefix ## Reserve(struct_t *this, size_t n) { \
+__VA_ARGS__ void prefix ## Reserve(struct_t *this, size_t n) { \
     if (this->capacity >= n) { \
         return; \
     } \
@@ -88,35 +92,53 @@ void prefix ## Reserve(struct_t *this, size_t n) { \
     } \
 } \
 \
-void prefix ## Fill(struct_t *this, size_t n, T value) { \
+__VA_ARGS__ void prefix ## Fill(struct_t *this, size_t n, T value) { \
     prefix ## Reserve(this, n); \
+    if (!this->items) { \
+        return; \
+    } \
+    this->length = n; \
     for (size_t i = 0; i < n; ++i) { \
         this->items[i] = value; \
     } \
 } \
 \
-T *prefix ## Append(struct_t *this, T value) { \
+__VA_ARGS__ T *prefix ## Append(struct_t *this, T value) { \
     __ ## prefix ## grow(this, this->length); \
     this->items[this->length++] = value; \
     return this->items + this->length - 1; \
 } \
 \
-void prefix ## Pop(struct_t *this) { \
+__VA_ARGS__ void prefix ## Pop(struct_t *this) { \
     --this->length; \
     \
     if (destructor) { \
         ((void (*)(T *))destructor)(this->items + this->length); \
     } \
 } \
-T *prefix ## Front(const struct_t *this) { \
+__VA_ARGS__ T *prefix ## Front(const struct_t *this) { \
     return this->items; \
 } \
-T *prefix ## Back(const struct_t *this) { \
+__VA_ARGS__ T *prefix ## Back(const struct_t *this) { \
     return this->items + this->length - 1; \
 } \
-struct_t prefix ## Move(struct_t *this) { \
+__VA_ARGS__ struct_t prefix ## Move(struct_t *this) { \
     struct_t ret = *this; \
     *this = prefix ## New(); \
+    return ret; \
+} \
+\
+__VA_ARGS__ struct_t prefix ## Dup(const struct_t *this) { \
+    struct_t ret = prefix ## NewWithCap(this->length); \
+    ret.length = this->length; \
+    if (duplicator) { \
+        for (size_t i = 0; i < ret.length; ++i) { \
+            ret.items[i] = ((T (*)(const T *))duplicator)(this->items + i); \
+        } \
+    } else { \
+        memcpy(ret.items, this->items, (sizeof *ret.items) * ret.length); \
+    } \
+    \
     return ret; \
 } \
 
