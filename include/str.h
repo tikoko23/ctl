@@ -3,6 +3,7 @@
 
 #include <stdbool.h>
 #include <stddef.h>
+#include <stdint.h>
 #include <stdio.h>
 
 #define tstrNewFromL(literal) tstrNewFromBuf((const unsigned char *)(literal), (sizeof literal) - 1)
@@ -54,5 +55,6 @@ bool tstrEq(const TString *this, const TString *that);
 bool tstrEqC(const TString *this, const char *cstr);
 bool tsvEq(TStringView this, TStringView that);
 bool tsvEqC(TStringView this, const char *cstr);
+uint64_t tsvHash(TStringView sv);
 
 #endif

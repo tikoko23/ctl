@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -200,3 +201,16 @@ bool tsvEq(TStringView this, TStringView that) {
 bool tsvEqC(TStringView this, const char *cstr) {
     return tsvCmpC(this, cstr) == 0;
 }
+
+// FNV-1a
+uint64_t tsvHash(TStringView sv) {
+    uint64_t h = 0xCBF29CE484222325;
+
+    for (size_t i = 0; i < sv.length; ++i) {
+        h ^= sv.data[i];
+        h *= 0x100000001B3;
+    }
+
+    return h;
+}
+
