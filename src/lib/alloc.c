@@ -29,6 +29,11 @@ void tarenaReset(TArena *this) {
 }
 
 void *tarenaAlloc(TArena *this, size_t n_bytes) {
+    size_t used = this->tail - this->head;
+    if (used + n_bytes > this->capacity) {
+        return NULL;
+    }
+
     void *ret = this->tail;
     this->tail += n_bytes;
 
