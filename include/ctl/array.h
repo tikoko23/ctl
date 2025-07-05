@@ -13,7 +13,7 @@ typedef struct { \
 CTL_DECLARE_ARRAY_METHODS_EXT(prefix, T, prefix) \
 
 #define CTL_DECLARE_ARRAY_METHODS_EXT(struct_t, T, prefix, ...) \
-__VA_ARGS__ struct_t prefix ## New(); \
+__VA_ARGS__ struct_t prefix ## New(void); \
 __VA_ARGS__ struct_t prefix ## NewWithCap(size_t cap); \
 __VA_ARGS__ struct_t prefix ## NewFilled(size_t n, T value); \
 __VA_ARGS__ void prefix ## Free(struct_t *this); \
@@ -49,7 +49,7 @@ static void __ ## prefix ## grow(struct_t *this, size_t n) { \
     prefix ## Reserve(this, this->capacity); \
 } \
 \
-__VA_ARGS__ struct_t prefix ## New() { \
+__VA_ARGS__ struct_t prefix ## New(void) { \
     struct_t this = { \
         .length = 0, \
         .capacity = 0, \

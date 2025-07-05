@@ -26,8 +26,7 @@ else ()
     add_compile_definitions("DEBUG=0")
 endif ()
 
-include_directories("include")
-
+include_directories("include/ctl")
 
 file(GLOB_RECURSE LIB_SOURCES src/lib/**.c)
 file(GLOB_RECURSE EXEC_SOURCES src/exec/**.c)
