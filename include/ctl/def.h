@@ -1,5 +1,5 @@
-#ifndef DEF_H
-#define DEF_H
+#ifndef CTL_DEF_H
+#define CTL_DEF_H
 
 typedef void (*TCleanup)(void *userdata);
 

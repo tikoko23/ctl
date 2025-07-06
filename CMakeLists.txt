@@ -21,9 +21,9 @@ if (USE_UBSAN)
 endif ()
 
 if (${CMAKE_BUILD_TYPE} STREQUAL "Debug")
-    add_compile_definitions("DEBUG=1")
+    add_compile_definitions("CTL_DEBUG=1")
 else ()
-    add_compile_definitions("DEBUG=0")
+    add_compile_definitions("CTL_DEBUG=0")
 endif ()
 
 include_directories("include/ctl")

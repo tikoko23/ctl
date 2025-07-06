@@ -1,5 +1,5 @@
-#ifndef CTL_STR
-#define CTL_STR
+#ifndef CTL_STR_H
+#define CTL_STR_H
 
 #include <stdbool.h>
 #include <stddef.h>

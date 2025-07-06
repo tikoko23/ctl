@@ -1,5 +1,5 @@
-#ifndef TYPEINFO_H
-#define TYPEINFO_H
+#ifndef CTL_TYPEINFO_H
+#define CTL_TYPEINFO_H
 
 #include <stddef.h>
 #include <stdint.h>

@@ -1,5 +1,5 @@
-#ifndef CTL_ARRAY
-#define CTL_ARRAY
+#ifndef CTL_ARRAY_H
+#define CTL_ARRAY_H
 
 #include <stddef.h>
 #include <stdlib.h>
