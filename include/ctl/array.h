@@ -27,7 +27,7 @@ __VA_ARGS__ struct_t prefix ## Move(struct_t *this); \
 __VA_ARGS__ struct_t prefix ## Dup(const struct_t *this); \
 
 #define CTL_DEFINE_ARRAY_METHODS(T, prefix) \
-CTL_DEFINE_ARRAY_METHODS_EXT(prefix, T, prefix, 0) \
+CTL_DEFINE_ARRAY_METHODS_EXT(prefix, T, prefix, NULL, NULL) \
 
 #define CTL_DEFINE_ARRAY_METHODS_EXT(struct_t, T, prefix, destructor, duplicator, ...) \
 static void __ ## prefix ## gen_warnings(void) { \
@@ -78,6 +78,8 @@ __VA_ARGS__ void prefix ## Free(struct_t *this) { \
     } \
     \
     free(this->items); \
+    \
+    *this = prefix ## New(); \
 } \
 \
 __VA_ARGS__ void prefix ## Reserve(struct_t *this, size_t n) { \

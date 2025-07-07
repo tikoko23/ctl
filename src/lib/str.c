@@ -114,6 +114,7 @@ void tstrShrink(TString *this) {
 
 void tstrFree(TString *this) {
     free(this->data);
+    *this = tstrNew();
 }
 
 // Modification

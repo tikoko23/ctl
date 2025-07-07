@@ -48,6 +48,7 @@ TArena tarenaMove(TArena *this) {
 
 void tarenaFree(TArena *this) {
     free(this->head);
+    *this = (TArena) {};
 }
 
 static void *mallocWrapper(size_t n_bytes, void *userdata) {
@@ -76,6 +77,8 @@ void tdaFree(TDynamicAllocator *this) {
     if (this->cleanup) {
         this->cleanup(this->userdata);
     }
+
+    *this = (TDynamicAllocator) {};
 }
 
 void *tdaAlloc(TDynamicAllocator *this, size_t bytes) {
