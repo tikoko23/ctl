@@ -2,6 +2,7 @@
 #include <string.h>
 
 #include "alloc.h"
+#include "def.h"
 
 TArena tarenaNew(size_t cap) {
     void *ptr = malloc(cap);
@@ -13,14 +14,16 @@ TArena tarenaNew(size_t cap) {
         .tail = ptr,
         .head = ptr,
         .capacity = cap,
+        .cleanup = NULL,
     };
 }
 
-TArena tarenaNewFromBuffer(void *head, size_t cap) {
+TArena tarenaNewFromBuffer(void *head, size_t cap, TCleanup cleanup) {
     return (TArena) {
         .head = head,
         .tail = head,
         .capacity = cap,
+        .cleanup = cleanup,
     };
 }
 
@@ -47,7 +50,12 @@ TArena tarenaMove(TArena *this) {
 }
 
 void tarenaFree(TArena *this) {
-    free(this->head);
+    if (this->cleanup) {
+        this->cleanup(this->head);
+    } else {
+        free(this->head);
+    }
+
     *this = (TArena) {};
 }
 

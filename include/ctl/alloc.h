@@ -9,10 +9,11 @@ typedef struct {
     void *head;
     void *tail;
     size_t capacity;
+    TCleanup cleanup;
 } TArena;
 
 TArena tarenaNew(size_t cap);
-TArena tarenaNewFromBuffer(void *head, size_t cap);
+TArena tarenaNewFromBuffer(void *head, size_t cap, TCleanup cleanup);
 
 void tarenaReset(TArena *this);
 void *tarenaAlloc(TArena *this, size_t n_bytes);
