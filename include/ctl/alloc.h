@@ -15,6 +15,7 @@ typedef struct {
     void *head;       /**< Start of the block */
     void *tail;       /**< Position for the next allocation */
     size_t capacity;  /**< Block size */
+    size_t alignment; /**< Alignment requirement, defaults to `8` if set to `0` */
     TCleanup cleanup; /**< Optional custom deallocation function */
 } TArena;
 

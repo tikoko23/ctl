@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -15,6 +16,7 @@ TArena tarenaNew(size_t cap) {
         .head = ptr,
         .capacity = cap,
         .cleanup = NULL,
+        .alignment = 8,
     };
 }
 
@@ -32,6 +34,13 @@ void tarenaReset(TArena *this) {
 }
 
 void *tarenaAlloc(TArena *this, size_t n_bytes) {
+    // This exists to keep zero-initalised structs valid
+    if (this->alignment == 0) {
+        this->alignment = 8;
+    }
+
+    this->tail += this->alignment - (uintptr_t)this->tail % this->alignment;
+
     size_t used = this->tail - this->head;
     if (used + n_bytes > this->capacity) {
         return NULL;
