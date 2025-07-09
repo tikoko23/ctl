@@ -1,3 +1,4 @@
+#include <ctype.h>
 #include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
@@ -215,3 +216,56 @@ uint64_t tsvHash(TStringView sv) {
     return h;
 }
 
+size_t tstrIndexOfFirst(const TString *str, TStringView candidates) {
+    return tsvIndexOfFirst(tsvNewFromStr(str), candidates);
+}
+
+size_t tsvIndexOfFirst(TStringView sv, TStringView candidates) {
+    bool table[1ULL << sizeof (char) * 8] = {};
+
+    for (size_t i = 0; i < candidates.length; ++i) {
+        table[candidates.data[i]] = true;
+    }
+
+    for (size_t i = 0; i < sv.length; ++i) {
+        if (table[sv.data[i]]) {
+            return i;
+        }
+    }
+
+    return (size_t)-1;
+}
+
+TStringView tstrStripSpaces(const TString *str) {
+    return tsvStripSpaces(tsvNewFromStr(str));
+}
+
+TStringView tsvStripSpaces(TStringView sv) {
+    if (sv.length == 0) {
+        return sv;
+    }
+
+    size_t start = 0, length = sv.length;
+
+    for (size_t i = 0; i < sv.length; ++i) {
+        if (!isspace(sv.data[i])) {
+            break;
+        }
+
+        ++start;
+        --length;
+    }
+
+    for (int32_t i = sv.length - 1; i > start; --i) {
+        if (!isspace(sv.data[i])) {
+            break;
+        }
+
+        --length;
+    }
+
+    return (TStringView) {
+        .data = sv.data + start,
+        .length = length,
+    };
+}

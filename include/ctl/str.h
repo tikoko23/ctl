@@ -252,4 +252,30 @@ bool tsvEqC(TStringView this, const char *cstr);
  */
 uint64_t tsvHash(TStringView sv);
 
+/**
+ * Finds any of the given chars in `str`.
+ * \param candidates List of characters to search
+ * \returns          The index of the first matching character, or `(size_t)-1` if not found
+ */
+size_t tstrIndexOfFirst(const TString *str, TStringView candidates);
+
+/**
+ * Finds any of the given chars in `sv`.
+ * \param candidates List of characters to search
+ * \returns          The index of the first matching character, or `(size_t)-1` if not found
+ */
+size_t tsvIndexOfFirst(TStringView sv, TStringView candidates);
+
+/**
+ * Constructs a view which skips whitespace from each end of `str`.
+ * \returns A view to `str` that does not include whitespace in any end
+ */
+TStringView tstrStripSpaces(const TString *str);
+
+/**
+ * Constructs a view which skips whitespace from each end of `sv`.
+ * \returns A view to `sv` that does not include whitespace in any end
+ */
+TStringView tsvStripSpaces(TStringView sv);
+
 #endif
