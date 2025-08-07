@@ -3,33 +3,40 @@
 
 #include "str.h"
 
-typedef int (*TFmtSpecHandler)(TString *out, va_list args);
+#define TFMT_OK 0
 
-void tFmtSetSpec(const char *spec, TFmtSpecHandler handler); // Pass `NULL` for `handler` to remove
+#define tFmtL(fmt, ...) tFmt(tsvNewFromL(fmt), __VA_ARGS__)
+#define tFmtLV(fmt, args) tFmtV(tsvNewFromL(fmt), args)
 
-TString tFmtC(const char *fmt, ...);
-TString tFmtCV(const char *fmt, va_list args);
-TString tFmtSv(TStringView fmt, ...);
-TString tFmtSvV(TStringView fmt, va_list args);
+#define tstrCatFmtL(str_p, fmt, ...) tstrCatFmt(str_p, tsvNewFromL(fmt), __VA_ARGS__)
+#define tstrCatFmtLV(str_p, fmt, args) tstrCatFmtV(str_p, tsvNewFromL(fmt), args)
 
-void tstrCatFmtC(TString *this, const char *fmt, ...);
-void tstrCatFmtCV(TString *this, const char *fmt, va_list args);
-void tstrCatFmtSv(TString *this, TStringView fmt, ...);
-void tstrCatFmtSvV(TString *this, TStringView fmt, va_list args);
+#define tPrintFmtL(fmt, ...) tPrintFmt(tsvNewFromL(fmt), __VA_ARGS__)
+#define tPrintFmtLV(fmt, args) tPrintFmtV(tsvNewFromL(fmt), args)
 
-int tPrintFmtC(const char *fmt, ...);
-int tPrintFmtCV(const char *fmt, va_list args);
-int tPrintFmtSv(TStringView fmt, ...);
-int tPrintFmtSvV(TStringView fmt, va_list args);
+#define tErrFmtL(fmt, ...) tErrFmt(tsvNewFromL(fmt), __VA_ARGS__)
+#define tErrFmtLV(fmt, args) tErrFmtV(tsvNewFromL(fmt), args)
 
-int tErrFmtC(const char *fmt, ...);
-int tErrFmtCV(const char *fmt, va_list args);
-int tErrFmtSv(TStringView fmt, ...);
-int tErrFmtSvV(TStringView fmt, va_list args);
+typedef int (*TFmtSpecHandler)(TString *out, TStringView prec, va_list args);
+typedef int (*TFmtWriter)(TStringView text, void *userdata);
 
-int tFPrintFmtC(FILE *f, const char *fmt, ...);
-int tFPrintFmtCV(FILE *f, const char *fmt, va_list args);
-int tFPrintFmtSv(FILE *f, TStringView fmt, ...);
-int tFPrintFmtSvV(FILE *f, TStringView fmt, va_list args);
+void tFmtInitialise(void);
+void tFmtDeinitialise(void);
+
+void tFmtSetSpec(const char *spec, TFmtSpecHandler handler);
+
+int tFmtWriteV(TStringView fmt, va_list args, TFmtWriter writer, void *userdata);
+
+TString tFmt(TStringView fmt, ...);
+TString tFmtV(TStringView fmt, va_list args);
+
+int tstrCatFmt(TString *this, TStringView fmt, ...);
+int tstrCatFmtV(TString *this, TStringView fmt, va_list args);
+
+int tPrintFmt(TStringView fmt, ...);
+int tPrintFmtV(TStringView fmt, va_list args);
+
+int tErrFmt(TStringView fmt, ...);
+int tErrFmtV(TStringView fmt, va_list args);
 
 #endif

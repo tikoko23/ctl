@@ -2,6 +2,7 @@
 #include <stdio.h>
 
 #include "array.h"
+#include "format.h"
 #include "hashmap.h"
 #include "str.h"
 
@@ -55,4 +56,10 @@ int main(void) {
     tHashmapFree(&map);
     i32Free(&arr);
     i32Free(&dup);
+
+    tFmtInitialise();
+
+    tPrintFmtL("n: 0x$[c|%X] $[c|%p] $[i32] $[bool] $[cstr]\n", 37u, NULL, -1, false, "c-style-string");
+
+    tFmtDeinitialise();
 }
