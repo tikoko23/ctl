@@ -101,7 +101,7 @@ static void __ ## prefix ## grow(struct_t *this, size_t n) { \
         this->capacity = n; \
     } \
     \
-    prefix ## Reserve(this, this->capacity); \
+    prefix ## Reserve(this, this->capacity + 1); \
 } \
 \
 __VA_ARGS__ struct_t prefix ## New(void) { \
@@ -142,6 +142,7 @@ __VA_ARGS__ void prefix ## Reserve(struct_t *this, size_t n) { \
         return; \
     } \
     \
+    this->capacity = n; \
     this->items = realloc(this->items, n * (sizeof *this->items)); \
     if (!this->items) { \
         this->length = 0; \
@@ -161,7 +162,7 @@ __VA_ARGS__ void prefix ## Fill(struct_t *this, size_t n, T value) { \
 } \
 \
 __VA_ARGS__ T *prefix ## Append(struct_t *this, T value) { \
-    __ ## prefix ## grow(this, this->length); \
+    __ ## prefix ## grow(this, this->length + 1); \
     this->items[this->length++] = value; \
     return this->items + this->length - 1; \
 } \

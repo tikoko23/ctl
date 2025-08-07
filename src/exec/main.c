@@ -2,6 +2,8 @@
 #include <stdio.h>
 
 #include "array.h"
+#include "hashmap.h"
+#include "str.h"
 
 typedef struct {
     size_t length, capacity;
@@ -16,17 +18,41 @@ static int32_t copyI32(const int32_t *this) {
 CTL_DECLARE_ARRAY_METHODS_EXT(I32Array, int32_t, i32);
 CTL_DEFINE_ARRAY_METHODS_EXT(I32Array, int32_t, i32, NULL, copyI32);
 
+static void eraseValue(void *ptr) {
+    printf("erasing: %d\n", *(int *)ptr);
+}
+
 int main(void) {
     I32Array arr = i32NewFilled(37, 23);
     i32Append(&arr, 37);
 
     for (size_t i = 0; i < arr.length; ++i) {
-        printf("%zu: %d\n", i, arr.items[i]);
+        // printf("%zu: %d\n", i, arr.items[i]);
     }
 
     I32Array dup = i32Dup(&arr);
 
     for (size_t i = 0; i < dup.length; ++i) {
-        printf("%zu: %d\n", i, dup.items[i]);
+        // printf("%zu: %d\n", i, dup.items[i]);
     }
+
+    int32_t arr2[64] = {
+        5, 3, 2, 0, 7, 1
+    };
+
+    THashmap map = tHashmapNewCb(64, eraseValue);
+    tHashmapSet(&map, tsvNewFromL("i1"), arr2);
+    tHashmapSet(&map, tsvNewFromL("i2"), arr2 + 8);
+    tHashmapSet(&map, tsvNewFromL("i1"), arr2 + 2);
+
+    printf("i1: %d\n", *(int *)tHashmapGet(&map, tsvNewFromL("i1")));
+    printf("i2: %d\n", *(int *)tHashmapGet(&map, tsvNewFromL("i2")));
+
+    tHashmapSet(&map, tsvNewFromL("i1"), NULL);
+
+    printf("i1: %p\n", tHashmapGet(&map, tsvNewFromL("i1")));
+
+    tHashmapFree(&map);
+    i32Free(&arr);
+    i32Free(&dup);
 }
