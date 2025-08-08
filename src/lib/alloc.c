@@ -8,7 +8,7 @@
 TArena tarenaNew(size_t cap) {
     void *ptr = malloc(cap);
     if (!ptr) {
-        return (TArena) {};
+        return (TArena) { 0 };
     }
 
     return (TArena) {
@@ -39,22 +39,22 @@ void *tarenaAlloc(TArena *this, size_t n_bytes) {
         this->alignment = 8;
     }
 
-    this->tail += this->alignment - (uintptr_t)this->tail % this->alignment;
+    this->tail = (unsigned char *)this->tail + this->alignment - (uintptr_t)this->tail % this->alignment;
 
-    size_t used = this->tail - this->head;
+    size_t used = (unsigned char *)this->tail - (unsigned char *)this->head;
     if (used + n_bytes > this->capacity) {
         return NULL;
     }
 
     void *ret = this->tail;
-    this->tail += n_bytes;
+    this->tail = (unsigned char *)this->tail + n_bytes;
 
     return ret;
 }
 
 TArena tarenaMove(TArena *this) {
     TArena ret = *this;
-    *this = (TArena) {};
+    *this = (TArena) { 0 };
     return ret;
 }
 
@@ -65,7 +65,7 @@ void tarenaFree(TArena *this) {
         free(this->head);
     }
 
-    *this = (TArena) {};
+    *this = (TArena) { 0 };
 }
 
 static void *mallocWrapper(size_t n_bytes, void *userdata) {
@@ -95,7 +95,7 @@ void tdaFree(TDynamicAllocator *this) {
         this->cleanup(this->userdata);
     }
 
-    *this = (TDynamicAllocator) {};
+    *this = (TDynamicAllocator) { 0 };
 }
 
 void *tdaAlloc(TDynamicAllocator *this, size_t bytes) {

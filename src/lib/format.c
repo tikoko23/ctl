@@ -8,6 +8,8 @@
 #include "hashmap.h"
 #include "str.h"
 
+#define fn_cast(T, value) ((T)(uintptr_t)(value))
+
 static THashmap format_specs = {
     .n_buckets = 0,
 };
@@ -166,11 +168,11 @@ void tFmtDeinitialise(void) {
     }
 
     tHashmapFree(&format_specs);
-    format_specs = (THashmap) {};
+    format_specs = (THashmap) { 0 };
 }
 
 void tFmtSetSpec(const char *spec, TFmtSpecHandler handler) {
-    tHashmapSet(&format_specs, tsvNewFromC(spec), handler);
+    tHashmapSet(&format_specs, tsvNewFromC(spec), fn_cast(void *, handler));
 }
 
 static int fstreamWriter(TStringView text, void *file) {
@@ -337,7 +339,7 @@ int tFmtWriteV(TStringView fmt, va_list args, TFmtWriter writer, void *userdata)
                     .data = fmt.data + prec_start_index,
                 };
 
-                TFmtSpecHandler handler = tHashmapGet(&format_specs, spec);
+                TFmtSpecHandler handler = fn_cast(TFmtSpecHandler, tHashmapGet(&format_specs, spec));
                 if (handler) {
                     TString data = tstrNew();
                     if ((status = handler(&data, prec, args)) != TFMT_OK) {

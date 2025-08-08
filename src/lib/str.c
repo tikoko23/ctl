@@ -221,7 +221,7 @@ size_t tstrIndexOfFirst(const TString *str, TStringView candidates) {
 }
 
 size_t tsvIndexOfFirst(TStringView sv, TStringView candidates) {
-    bool table[1ULL << sizeof (char) * 8] = {};
+    bool table[1ULL << sizeof (char) * 8] = { 0 };
 
     for (size_t i = 0; i < candidates.length; ++i) {
         table[candidates.data[i]] = true;

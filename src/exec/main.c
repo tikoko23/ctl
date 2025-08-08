@@ -16,8 +16,8 @@ static int32_t copyI32(const int32_t *this) {
     return *this + 1;
 }
 
-CTL_DECLARE_ARRAY_METHODS_EXT(I32Array, int32_t, i32);
-CTL_DEFINE_ARRAY_METHODS_EXT(I32Array, int32_t, i32, NULL, copyI32);
+CTL_DECLARE_ARRAY_METHODS_EXT(I32Array, int32_t, i32,)
+CTL_DEFINE_ARRAY_METHODS_EXT(I32Array, int32_t, i32, NULL, copyI32,)
 
 static void eraseValue(void *ptr) {
     printf("erasing: %d\n", *(int *)ptr);

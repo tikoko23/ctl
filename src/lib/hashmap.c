@@ -2,8 +2,8 @@
 #include "array.h"
 #include "str.h"
 
-CTL_DECLARE_ARRAY_METHODS_EXT(_THashmapBucket, _THashmapItem, bucket, static);
-CTL_DEFINE_ARRAY_METHODS_EXT(_THashmapBucket, _THashmapItem, bucket, NULL, NULL, static);
+CTL_DECLARE_ARRAY_METHODS_EXT(_THashmapBucket, _THashmapItem, bucket, static)
+CTL_DEFINE_ARRAY_METHODS_EXT(_THashmapBucket, _THashmapItem, bucket, NULL, NULL, static)
 
 static _THashmapBucket *getBucket(const THashmap *this, TStringView key) {
     return this->buckets + (tsvHash(key) % this->n_buckets);
@@ -37,7 +37,7 @@ THashmap tHashmapNew(size_t n_buckets) {
 
     this.buckets = calloc(n_buckets, sizeof *this.buckets);
     if (!this.buckets) {
-        return (THashmap) {};
+        return (THashmap) { 0 };
     }
 
     return this;
