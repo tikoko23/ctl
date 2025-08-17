@@ -224,11 +224,11 @@ size_t tsvIndexOfFirst(TStringView sv, TStringView candidates) {
     bool table[1ULL << sizeof (char) * 8] = { 0 };
 
     for (size_t i = 0; i < candidates.length; ++i) {
-        table[candidates.data[i]] = true;
+        table[(unsigned char)candidates.data[i]] = true;
     }
 
     for (size_t i = 0; i < sv.length; ++i) {
-        if (table[sv.data[i]]) {
+        if (table[(unsigned char)sv.data[i]]) {
             return i;
         }
     }
