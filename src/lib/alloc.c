@@ -2,8 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "alloc.h"
-#include "def.h"
+#include "ctl/alloc.h"
+#include "ctl/def.h"
 
 TArena tarenaNew(size_t cap) {
     void *ptr = malloc(cap);

@@ -1,10 +1,10 @@
 #include <stdint.h>
 #include <stdio.h>
 
-#include "array.h"
-#include "format.h"
-#include "hashmap.h"
-#include "str.h"
+#include "ctl/array.h"
+#include "ctl/format.h"
+#include "ctl/hashmap.h"
+#include "ctl/str.h"
 
 typedef struct {
     size_t length, capacity;

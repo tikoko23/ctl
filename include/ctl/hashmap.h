@@ -1,8 +1,8 @@
 #ifndef CTL_HASHMAP_H
 #define CTL_HASHMAP_H
 
-#include "def.h"
-#include "str.h"
+#include "ctl/def.h"
+#include "ctl/str.h"
 
 typedef struct {
     void *data;

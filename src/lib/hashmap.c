@@ -1,6 +1,6 @@
-#include "hashmap.h"
-#include "array.h"
-#include "str.h"
+#include "ctl/hashmap.h"
+#include "ctl/array.h"
+#include "ctl/str.h"
 
 CTL_DECLARE_ARRAY_METHODS_EXT(_THashmapBucket, _THashmapItem, bucket, static)
 CTL_DEFINE_ARRAY_METHODS_EXT(_THashmapBucket, _THashmapItem, bucket, NULL, NULL, static)

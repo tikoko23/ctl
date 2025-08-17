@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "str.h"
+#include "ctl/str.h"
 
 TString tstrNew(void) {
     return (TString) {

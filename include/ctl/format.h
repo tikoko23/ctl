@@ -1,7 +1,7 @@
 #ifndef CTL_FORMAT_H
 #define CTL_FORMAT_H
 
-#include "str.h"
+#include "ctl/str.h"
 
 /**
  * Constant which signifies success for \ref "TFmtWriter" and \ref "TFmtSpecHandler" callbacks

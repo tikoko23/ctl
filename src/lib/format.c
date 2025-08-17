@@ -4,9 +4,9 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "format.h"
-#include "hashmap.h"
-#include "str.h"
+#include "ctl/format.h"
+#include "ctl/hashmap.h"
+#include "ctl/str.h"
 
 #define fn_cast(T, value) ((T)(uintptr_t)(value))
 
